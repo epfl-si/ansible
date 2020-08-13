@@ -640,8 +640,10 @@ class TaskExecutor:
         display.debug("starting attempt loop")
         result = None
         for attempt in xrange(1, retries + 1):
-            display.debug("running the handler")
+            display.debug("running the handler")            
             try:
+                with open("/tmp/debug-py.log", "a") as f:
+                    f.write("log start\n")
                 result = self._handler.run(task_vars=variables)
             except AnsibleActionSkip as e:
                 return dict(skipped=True, msg=to_text(e))
@@ -650,6 +652,8 @@ class TaskExecutor:
             except AnsibleConnectionFailure as e:
                 return dict(unreachable=True, msg=to_text(e))
             finally:
+                with open("/tmp/debug-py.log", "a") as f:
+                    f.write("log end\n")
                 self._handler.cleanup()
             display.debug("handler run complete")
 
