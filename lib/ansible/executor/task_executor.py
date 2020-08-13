@@ -643,7 +643,7 @@ class TaskExecutor:
             display.debug("running the handler")            
             try:
                 with open("/tmp/debug-py.log", "a") as f:
-                    f.write("log start\n")
+                    f.write("log start by zuzu\n")
                 result = self._handler.run(task_vars=variables)
             except AnsibleActionSkip as e:
                 return dict(skipped=True, msg=to_text(e))
@@ -653,7 +653,7 @@ class TaskExecutor:
                 return dict(unreachable=True, msg=to_text(e))
             finally:
                 with open("/tmp/debug-py.log", "a") as f:
-                    f.write("log end\n")
+                    f.write("log end again by zuzu\n")
                 self._handler.cleanup()
             display.debug("handler run complete")
 
