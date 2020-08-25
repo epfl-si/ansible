@@ -642,8 +642,10 @@ class TaskExecutor:
         for attempt in xrange(1, retries + 1):
             display.debug("running the handler")            
             try:
+                #zzz zf200813
+                # import sys; sys.path.append("/Users/zuzu/Library/Application Support/JetBrains/IntelliJIdea2020.2/plugins/python/pydevd-pycharm.egg"); import pydevd; pydevd.settrace('localhost', port=12477, stdoutToServer=True, stderrToServer=True)
                 with open("/tmp/debug-py.log", "a") as f:
-                    f.write("log start by zuzu\n")
+                    f.write("log start by zuzu, " + str(self._host) + ": " + str(self._task) + " at " + str(time.time()) + "\n")
                 result = self._handler.run(task_vars=variables)
             except AnsibleActionSkip as e:
                 return dict(skipped=True, msg=to_text(e))
@@ -652,8 +654,9 @@ class TaskExecutor:
             except AnsibleConnectionFailure as e:
                 return dict(unreachable=True, msg=to_text(e))
             finally:
+                #zzz zf200813
                 with open("/tmp/debug-py.log", "a") as f:
-                    f.write("log end again by zuzu\n")
+                    f.write("log end by zuzu, " + str(self._host) + ": " + str(self._task) + " at " + str(time.time()) + "\n")
                 self._handler.cleanup()
             display.debug("handler run complete")
 
