@@ -2,8 +2,8 @@
 # (c) 2017 Ansible Project
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-#zzz zf200827
-# canary 200831.1933
+#zzz200901
+# canary 200901.1103
 #zzz
 
 from __future__ import (absolute_import, division, print_function)
@@ -19,9 +19,10 @@ import sys
 import termios
 import traceback
 
-#zzz zf200831
+#zzz200901
 import socket                
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
+ztz = 2     # été = 2, hiver = 1
 #zzz
 
 from ansible import constants as C
@@ -652,9 +653,9 @@ class TaskExecutor:
         for attempt in xrange(1, retries + 1):
             display.debug("running the handler")            
             try:
-                #zzz zf200831
+                #zzz200901
                 #import sys; sys.path.append("/Users/zuzu/Library/Application Support/JetBrains/IntelliJIdea2020.2/plugins/python/pydevd-pycharm.egg"); import pydevd; pydevd.settrace('localhost', port=12477, stdoutToServer=True, stderrToServer=True)
-                ztimestamp = "log start by zuzu, " + str(self._host) + ": " + str(self._task) + " at " + str(datetime.now()) + "\n"
+                ztimestamp = "log start by zuzu, " + str(self._host) + ": " + str(self._task) + " at " + str(datetime.now(timezone(timedelta(hours=ztz)))) + "\n"
                 # with open("/tmp/debug-py.log", "a") as f:
                 #     f.write(ztimestamp)
                 s = socket.socket()    
@@ -674,8 +675,8 @@ class TaskExecutor:
             except AnsibleConnectionFailure as e:
                 return dict(unreachable=True, msg=to_text(e))
             finally:
-                #zzz zf200831
-                ztimestamp = "log end by zuzu, " + str(self._host) + ": " + str(self._task) + " at " + str(datetime.now()) + "\n"
+                #zzz200901
+                ztimestamp = "log end by zuzu, " + str(self._host) + ": " + str(self._task) + " at " + str(datetime.now(timezone(timedelta(hours=ztz)))) + "\n"
                 # with open("/tmp/debug-py.log", "a") as f:
                 #     f.write(ztimestamp)
                 s = socket.socket()    
