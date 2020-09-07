@@ -3,7 +3,7 @@
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 #zzz200901
-# canary 200902.1447
+# canary 200907.1034
 #zzz
 
 from __future__ import (absolute_import, division, print_function)
@@ -653,13 +653,9 @@ class TaskExecutor:
         for attempt in xrange(1, retries + 1):
             display.debug("running the handler")            
             try:
-                #zzz200901
+                #zzz200907
                 #import sys; sys.path.append("/Users/zuzu/Library/Application Support/JetBrains/IntelliJIdea2020.2/plugins/python/pydevd-pycharm.egg"); import pydevd; pydevd.settrace('localhost', port=12477, stdoutToServer=True, stderrToServer=True)
-                # ztimestamp = "log start by zuzu, " + str(self._host) + ": " + str(self._task) + " at " + str(datetime.now(timezone(timedelta(hours=ztz)))) + "\n"
                 ztimestamp = "log start by zuzu, " + str(self._host) + ": PATH: " + self._task.get_path() + ", " + str(self._task) + " at " + str(datetime.now(timezone(timedelta(hours=ztz)))) + "\n"
-                
-                
-                
                 # with open("/tmp/debug-py.log", "a") as f:
                 #     f.write(ztimestamp)
                 s = socket.socket()    
@@ -679,8 +675,8 @@ class TaskExecutor:
             except AnsibleConnectionFailure as e:
                 return dict(unreachable=True, msg=to_text(e))
             finally:
-                #zzz200901
-                ztimestamp = "log end by zuzu, " + str(self._host) + ": " + str(self._task) + " at " + str(datetime.now(timezone(timedelta(hours=ztz)))) + "\n"
+                #zzz200907
+                ztimestamp = "log end by zuzu, " + str(self._host) + ": PATH: " + self._task.get_path() + ", " + str(self._task) + " at " + str(datetime.now(timezone(timedelta(hours=ztz)))) + "\n"
                 # with open("/tmp/debug-py.log", "a") as f:
                 #     f.write(ztimestamp)
                 s = socket.socket()    
