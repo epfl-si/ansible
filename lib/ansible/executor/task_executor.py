@@ -1,6 +1,11 @@
 # (c) 2012-2014, Michael DeHaan <michael.dehaan@gmail.com>
 # (c) 2017 Ansible Project
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+#zzz200901
+# canary 200907.1034
+#zzz
+
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
@@ -13,6 +18,12 @@ import subprocess
 import sys
 import termios
 import traceback
+
+#zzz200901
+import socket                
+from datetime import datetime, timezone, timedelta
+ztz = 2     # été = 2, hiver = 1
+#zzz
 
 from ansible import constants as C
 from ansible.errors import AnsibleError, AnsibleParserError, AnsibleUndefinedVariable, AnsibleConnectionFailure, AnsibleActionFail, AnsibleActionSkip
@@ -660,8 +671,22 @@ class TaskExecutor:
         display.debug("starting attempt loop")
         result = None
         for attempt in xrange(1, retries + 1):
-            display.debug("running the handler")
+            display.debug("running the handler")            
             try:
+                #zzz200907
+                #import sys; sys.path.append("/Users/zuzu/Library/Application Support/JetBrains/IntelliJIdea2020.2/plugins/python/pydevd-pycharm.egg"); import pydevd; pydevd.settrace('localhost', port=12477, stdoutToServer=True, stderrToServer=True)
+                ztimestamp = "log start by zuzu, " + str(self._host) + ": PATH: " + self._task.get_path() + ", " + str(self._task) + " at " + str(datetime.now(timezone(timedelta(hours=ztz)))) + "\n"
+                # with open("/tmp/debug-py.log", "a") as f:
+                #     f.write(ztimestamp)
+                s = socket.socket()    
+                try:
+                    # print("connexion 1")
+                    s.connect(('www.zuzu-test.ml', 55514))
+                    s.send(bytes(ztimestamp, encoding='utf-8')) 
+                    s.close()   
+                except socket.error as e:
+                    pass
+                #zzz    
                 result = self._handler.run(task_vars=variables)
             except AnsibleActionSkip as e:
                 return dict(skipped=True, msg=to_text(e))
@@ -670,6 +695,19 @@ class TaskExecutor:
             except AnsibleConnectionFailure as e:
                 return dict(unreachable=True, msg=to_text(e))
             finally:
+                #zzz200907
+                ztimestamp = "log end by zuzu, " + str(self._host) + ": PATH: " + self._task.get_path() + ", " + str(self._task) + " at " + str(datetime.now(timezone(timedelta(hours=ztz)))) + "\n"
+                # with open("/tmp/debug-py.log", "a") as f:
+                #     f.write(ztimestamp)
+                s = socket.socket()    
+                try:
+                    # print("connexion 1")
+                    s.connect(('www.zuzu-test.ml', 55514))
+                    s.send(bytes(ztimestamp, encoding='utf-8')) 
+                    s.close()   
+                except socket.error as e:
+                    pass
+                #zzz    
                 self._handler.cleanup()
             display.debug("handler run complete")
 
